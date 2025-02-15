@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인천소상공인연합회 가입 신청서</title>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .radio-group label, .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .address-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .address-container input {
+            flex: 3;
+        }
+        .address-container button {
+            flex: 1;
+            background: #002766;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>인천소상공인연합회 가입 신청서</h2>
+
+    <form action="https://formsubmit.co/jungaia@hanmail.net" method="POST">
+        <input type="hidden" name="_subject" value="새로운 신청서 제출됨!">
+        <input type="hidden" name="_captcha" value="false">
+
+        <label for="referrer">추천인</label>
+        <input type="text" id="referrer" name="referrer">
+
+        <label>기본사항</label>
+        <div class="radio-group">
+            <label><input type="radio" name="business_type" value="개인사업자"> 개인사업자</label>
+            <label><input type="radio" name="business_type" value="법인사업자"> 법인사업자</label>
+            <label><input type="radio" name="business_type" value="예비"> 예비</label>
+        </div>
+
+        <label for="name">성명 *</label>
+        <input type="text" id="name" name="name" required>
+
+        <label>성별</label>
+        <div class="radio-group">
+            <label><input type="radio" name="gender" value="여성"> 여성</label>
+            <label><input type="radio" name="gender" value="남성"> 남성</label>
+        </div>
+
+        <label for="birthdate">생년월일 *</label>
+        <input type="text" id="birthdate" name="birthdate" placeholder="ex) 990101 (6자리)" required>
+
+        <label for="phone">휴대폰 번호 *</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" name="email" placeholder="sample@mail.com">
+
+        <label>주소</label>
+        <div class="address-container">
+            <input type="text" id="zipcode" name="zipcode" placeholder="우편번호" readonly>
+            <button type="button" onclick="execDaumPostcode()">주소검색</button>
+        </div>
+        <input type="text" id="address" name="address" placeholder="기본주소" readonly>
+        <input type="text" id="address_detail" name="address_detail" placeholder="상세주소">
+
+        <label>납부금액 (매월)</label>
+        <div class="radio-group">
+            <label><input type="radio" name="payment_amount" value="3000원"> 3,000원</label>
+            <label><input type="radio" name="payment_amount" value="5000원"> 5,000원</label>
+            <label><input type="radio" name="payment_amount" value="10000원"> 10,000원</label>
+        </div>
+
+        <label>결제일 (매월)</label>
+        <p>매월 5일 자동</p>
+
+        <label>납부방법 (택1)</label>
+        <div class="radio-group">
+            <label><input type="radio" name="payment_method" value="CMS"> CMS방법 (자동이체)</label>
+        </div>
+
+        <label for="account_holder">예금주</label>
+        <input type="text" id="account_holder" name="account_holder">
+
+        <label for="account_birthdate">예금주 생년월일</label>
+        <input type="text" id="account_birthdate" name="account_birthdate" placeholder="*법인통장인 경우 사업자등록번호 입력">
+
+        <label for="bank">은행명</label>
+        <input type="text" id="bank" name="bank">
+
+        <label for="account_number">계좌번호</label>
+        <input type="text" id="account_number" name="account_number" placeholder="계좌 입력시 - 넣어주세요">
+
+        <label>본인은 소상공인연합회 회원이 되고자 가입을 신청합니다.</label>
+        <p>위 개인정보와 금융거래 정보의 수집 및 이용, 제3자 제공 및 월 자동납부에 동의합니다.</p>
+        <input type="checkbox" id="agreement" name="agreement"> <label for="agreement">동의합니다.</label>
+
+        <button type="submit">이메일로 신청서 전송</button>
+    </form>
+</div>
+
+<script>
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                document.getElementById('zipcode').value = data.zonecode;
+                document.getElementById('address').value = data.roadAddress || data.jibunAddress;
+            }
+        }).open();
+    }
+</script>
+
+</body>
+</html>
